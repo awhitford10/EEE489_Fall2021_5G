@@ -1,1 +1,1 @@
-web gunicorn api_5g.wsgi
+web gunicorn EEE_489_5G.wsgi
