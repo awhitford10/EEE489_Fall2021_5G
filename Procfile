@@ -1,0 +1,1 @@
+web gunicorn api_5g.wsgi
