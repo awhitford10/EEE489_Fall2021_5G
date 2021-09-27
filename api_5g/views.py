@@ -12,9 +12,9 @@ def led(request, luminance):
     '''
     initial_time = time.perf_counter()
     if request.method=="GET":
-        if luminance<50:
+        if luminance<1:
             return JsonResponse({'led_setting':1, 'time in milliseconds': (time.perf_counter()-initial_time)*1000})
-        elif luminance>=50:
+        elif luminance>=1:
             return JsonResponse({'led_setting':0, 'time in milliseconds': (time.perf_counter()-initial_time)*1000})
     
 
