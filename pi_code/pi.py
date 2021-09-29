@@ -70,6 +70,6 @@ pic = list(im.getdata())          #This info needs to be pushed to fetch request
 pic_string = (",".join([str(x) for x in pic]))
 
 image_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryvideo/{pic_string}'   
-image_response = get(image_fetch_url, data={'picture_data':pic}).json()
+image_response = get(image_fetch_url).json()
 print(image_response)
 
