@@ -24,7 +24,6 @@ def video(request, picture_data):
     The rasberry pi should send a fetch request to http://{IP address for local machine}:8000/rasberryvideo/{binary_picture}
     output will be a binary value to control the camera
     '''
-    output = list(picture_data)
 
-    return JsonResponse({'picture':output})
+    return JsonResponse({'picture':picture_data})
 

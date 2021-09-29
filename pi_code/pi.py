@@ -7,6 +7,7 @@ from PIL import Image, ImageOps
 # import smbus
 import sys
 import time as t
+import json
 # import board
 # import adafruit_veml7700
 # from picamera import PiCamera
@@ -63,9 +64,12 @@ im = ImageOps.grayscale(im)
 im = im.resize((28,28), Image.ANTIALIAS)                    #resize image to same size as ML analysis
 
 im.save('resize.jpg')                                       #image saved to for viewing purposes 
-pic = str(list(im.getdata()))                                   #This info needs to be pushed to fetch request
+pic = list(im.getdata())          #This info needs to be pushed to fetch request
 
-image_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryvideo/{pic}'   # fetch for lux value
-image_response = get(image_fetch_url).json()
+
+pic_string = (",".join([str(x) for x in pic]))
+
+image_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryvideo/{pic_string}'   
+image_response = get(image_fetch_url, data={'picture_data':pic}).json()
 print(image_response)
 
