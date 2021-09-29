@@ -1,7 +1,9 @@
 from django.http.response import JsonResponse
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
+import pandas as pd
 import time
+
 
 
 def led(request, luminance):
@@ -24,6 +26,8 @@ def video(request, picture_data):
     The rasberry pi should send a fetch request to http://{IP address for local machine}:8000/rasberryvideo/{binary_picture}
     output will be a binary value to control the camera
     '''
+    # df_train = pd.read_csv('../ASL_ML_images/sign_mnist_train/sign_mnist_train.csv', delimiter=',')
+    # df_test = pd.read_csv('../ASL_ML_images/sign_mnist_test/sign_mnist_test.csv', delimiter=',')
 
     return JsonResponse({'picture':picture_data})
 
