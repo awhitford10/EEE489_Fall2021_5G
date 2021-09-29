@@ -63,4 +63,9 @@ im = ImageOps.grayscale(im)
 im = im.resize((28,28), Image.ANTIALIAS)                    #resize image to same size as ML analysis
 
 im.save('resize.jpg')                                       #image saved to for viewing purposes 
-print('image data:',list(im.getdata()))                                   #This info needs to be pushed to fetch request
+pic = str(list(im.getdata()))                                   #This info needs to be pushed to fetch request
+
+image_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryvideo/{pic}'   # fetch for lux value
+image_response = get(image_fetch_url).json()
+print(image_response)
+
