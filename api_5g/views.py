@@ -18,13 +18,13 @@ def led(request, luminance):
             return JsonResponse({'led_setting':0, 'time in milliseconds': (time.perf_counter()-initial_time)*1000})
     
 
-def video(request, binary_picture):
+def video(request, picture_data):
     '''
     This is an API call for the video camera
     The rasberry pi should send a fetch request to http://{IP address for local machine}:8000/rasberryvideo/{binary_picture}
     output will be a binary value to control the camera
     '''
-    initial_time = time.perf_counter()
+    output = list(picture_data)
 
-    return HttpResponse('Video Test')
+    return JsonResponse({'picture':output})
 
