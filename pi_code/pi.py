@@ -24,22 +24,24 @@ DEVICE_ADDR = 0x11
 
 while True:
 
+    total_time = t.perf_counter()
+
     ############################# LED Section ###########################################
   
-    # led_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryled/{veml7700.lux}'   # fetch for lux value
-    led_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryled/0'   # fetch for lux value
-    print('low lux value simulated')
-    led_response = get(led_fetch_url).json()                                        # make a get request to heroku website
+    # led_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryled/{veml7700.lux}'   # fetch for lux value with pi
+    led_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryled/0'   # fetch for local simulation
+    print('\n\n____________________________________________\n\nlow lux value simulated\n')
+    led_response = get(led_fetch_url).json()                  # make a get request to heroku website
+    print('led setting:',led_response['led_setting'],'\nled backend processing time in milliseconds:',led_response['time'])
 
     if led_response['led_setting'] == 1:
         # bus.write_byte_data(DEVICE_ADDR, 1, 0xFF)           # turns on led if fetch request sends back on command
-        print('led turns on')
+        print('\nled turns on')
         # image = camera.capture(format = 'jpeg')             # Image taken if led is on
         print('takes picture')
         t.sleep(1)             
         # bus.write_byte_data(DEVICE_ADDR, 1, 0x00)           # turns off led if fetch sends back off
-        print('led turns off')
-        break
+        print('led turns off\n')
 
     elif led_response['led_setting'] == 0:
         # bus.write_byte_data(DEVICE_ADDR, 1, 0x00)           # turns off led if fetch sends back off
@@ -49,28 +51,28 @@ while True:
 
     ############################ Image Section ##########################################
 
+    # im = image                                                # image from rasberry pi not used in simulation
+    im = Image.open('HandsignalA.jpg')                          # image upload for cpu simulation
+    im = ImageOps.grayscale(im)                                 # Converts image to grayscale
+    im = im.resize((28,28), Image.ANTIALIAS)                    # Resize image to same size as ML analysis (28x28px)
 
-    # image_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryled/test'   # fetch for lux value
-    # image_response = get(image_fetch_url).json()
-
-    # if image_response['complete'] == 1:
-    #     break    
-
-    
-    t.sleep(1)                                              # controls burst interval
-
-im = Image.open('HandsignalA.jpg')
-im = ImageOps.grayscale(im)
-im = im.resize((28,28), Image.ANTIALIAS)                    #resize image to same size as ML analysis
-
-im.save('resize.jpg')                                       #image saved to for viewing purposes 
-pic = list(im.getdata())          #This info needs to be pushed to fetch request
+    #im.save('resize.jpg')                                      #image saved to for viewing purposes/troubleshooting 
+    pic = list(im.getdata())                                    # Gets image data as a list of pixels
 
 
-pic_string = (",".join([str(x) for x in pic]))
+    pic_string = (",".join([str(x) for x in pic]))              # joins data for minimal string
 
-# image_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryvideo/{pic_string}' 
-image_fetch_url = f'http://127.0.0.1:8000/rasberryvideo/{pic_string}'   
-image_response = get(image_fetch_url).json()
-print(image_response)
+    # image_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryvideo/{pic_string}' 
+    image_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryvideo/{pic_string}'   
+    image_response = get(image_fetch_url).json()
+
+    print('Prediction:',image_response['prediction'],'\nVideo backend procesing time in milliseconds:', image_response['time'] )
+    end_time = (t.perf_counter()-total_time)*1000
+    print('\nTotal time:', end_time)
+    print('delta time(back and forth communication):', end_time - image_response['time'] - led_response['time'] )
+
+    t.sleep(1)
+
+    print('\nend of simulation\n_______________________________')
+    break                                                       #break after one run through for testing 
 
