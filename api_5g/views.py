@@ -18,9 +18,9 @@ def led(request, luminance):
     initial_time = time.perf_counter()
     if request.method=="GET":
         if luminance<1:
-            return JsonResponse({'led_setting':1, 'time in milliseconds': (time.perf_counter()-initial_time)*1000})
+            return JsonResponse({'led_setting':1, 'time': (time.perf_counter()-initial_time)*1000})
         elif luminance>=1:
-            return JsonResponse({'led_setting':0, 'time in milliseconds': (time.perf_counter()-initial_time)*1000})
+            return JsonResponse({'led_setting':0, 'time': (time.perf_counter()-initial_time)*1000})
     
 
 def video(request, picture_data):
@@ -50,5 +50,5 @@ def video(request, picture_data):
     prediction = KNN.predict(data_to_predict)
     print(prediction)
 
-    return JsonResponse({'prediction': str(prediction[0]), 'time in milliseconds': (time.perf_counter()-initial_time)*1000})
+    return JsonResponse({'prediction': str(prediction[0]), 'time': (time.perf_counter()-initial_time)*1000})
 
