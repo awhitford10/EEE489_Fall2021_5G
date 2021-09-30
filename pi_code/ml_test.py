@@ -5,9 +5,9 @@ from PIL import Image, ImageOps
 # from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 # from sklearn.naive_bayes import GaussianNB
 # from sklearn.tree import DecisionTreeClassifier
-from sklearn.svm import SVC
-from sklearn.metrics import classification_report
-from sklearn.metrics import accuracy_score
+# from sklearn.svm import SVC
+# from sklearn.metrics import classification_report
+# from sklearn.metrics import accuracy_score
 import time
 
 df_train = pd.read_csv('../ASL_ML_images/sign_mnist_train/sign_mnist_train.csv', delimiter=',')
