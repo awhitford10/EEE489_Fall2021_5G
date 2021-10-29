@@ -4,6 +4,7 @@
 
 from requests import get
 from PIL import Image, ImageOps
+import pyspeedtest
 # import smbus
 import sys
 import time as t
@@ -29,10 +30,12 @@ while True:
     ############################# LED Section ###########################################
   
     # led_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryled/{veml7700.lux}'   # fetch for lux value with pi
-    led_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryled/0'   # fetch for local simulation
+    led_fetch_url = f'http://127.0.0.1:8000/rasberryled/0'   # fetch for local simulation
     print('\n\n____________________________________________\n\nlow lux value simulated\n')
-    led_response = get(led_fetch_url).json()                  # make a get request to heroku website
+    led_get = get(led_fetch_url)
+    led_response = led_get.json()                  # make a get request to heroku website
     print('led setting:',led_response['led_setting'],'\nled backend processing time in milliseconds:',led_response['time'])
+    print('LED fetch response time(milliseconds): ', led_get.elapsed.total_seconds()*1000)
 
     if led_response['led_setting'] == 1:
         # bus.write_byte_data(DEVICE_ADDR, 1, 0xFF)           # turns on led if fetch request sends back on command
@@ -63,16 +66,21 @@ while True:
     pic_string = (",".join([str(x) for x in pic]))              # joins data for minimal string
 
     # image_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryvideo/{pic_string}' 
-    image_fetch_url = f'https://eee489-5g.herokuapp.com/rasberryvideo/{pic_string}'   
-    image_response = get(image_fetch_url).json()
+    image_fetch_url = f'http://127.0.0.1:8000/rasberryvideo/{pic_string}'   
+    get_image = get(image_fetch_url)
+    image_response = get_image.json()
 
     print('Prediction:',image_response['prediction'],'\nVideo backend procesing time in milliseconds:', image_response['time'] )
     end_time = (t.perf_counter()-total_time)*1000
     print('\nTotal time:', end_time)
     print('delta time(back and forth communication):', end_time - image_response['time'] - led_response['time'] )
+    print('Image fetch response time(milliseconds): ', get_image.elapsed.total_seconds()*1000)
 
     t.sleep(1)
 
     print('\nend of simulation\n_______________________________')
     break                                                       #break after one run through for testing 
+
+
+
 

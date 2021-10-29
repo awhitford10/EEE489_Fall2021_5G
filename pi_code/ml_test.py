@@ -9,6 +9,7 @@ from PIL import Image, ImageOps
 # from sklearn.metrics import classification_report
 # from sklearn.metrics import accuracy_score
 import time
+import tensorflow as tf
 
 df_train = pd.read_csv('../ASL_ML_images/sign_mnist_train/sign_mnist_train.csv', delimiter=',')
 df_test = pd.read_csv('../ASL_ML_images/sign_mnist_test/sign_mnist_test.csv', delimiter=',')
@@ -36,7 +37,7 @@ pic = pd.DataFrame(list(im.getdata()))
 pic = pic.transpose()                                   
 
 test_pic_prediction = KNN_model.predict(pic)
-print(test_pic_prediction)
+print('\n\n\nKNN Prediction:',test_pic_prediction,'\n\n\n')
 
 # KNN_prediction = KNN_model.predict(x_test)                # Testing 84% accy, 1.6 second timing
 # print('\n\nKNN report:')
@@ -92,6 +93,15 @@ print(test_pic_prediction)
 # print(accuracy_score(LDA_prediction,y_test))
 # print(classification_report(LDA_prediction,y_test))
 
+############################# Convolutional Neural Network ##########################
 
+# model = Sequential()
 
+# y_train = df_train['label']
+# x_train = df_train[df_train.columns[1:]]
+
+# y_test = df_test['label']
+# x_test= df_test[df_test.columns[1:]]
+
+print(x_test/255)
 

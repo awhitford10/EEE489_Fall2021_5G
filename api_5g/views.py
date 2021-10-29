@@ -7,6 +7,12 @@ import pandas as pd
 import os
 import time
 
+file_path = os.path.join(settings.STATIC_ROOT, 'data/sign_mnist_train.csv')
+df_train = pd.read_csv(file_path, delimiter=',')
+y_train = df_train['label']
+x_train = df_train[df_train.columns[1:]]
+KNN = KNeighborsClassifier(n_neighbors=5)
+KNN.fit(x_train,y_train)
 
 
 def led(request, luminance):
@@ -33,19 +39,7 @@ def video(request, picture_data):
 
     pic_list_of_strings = picture_data.split(',')
     data_to_predict = pd.DataFrame([int(x) for x in pic_list_of_strings])
-    data_to_predict = data_to_predict.transpose()
-
-
-    # Creates Dataframes for training data from static files
-    file_path = os.path.join(settings.STATIC_ROOT, 'data/sign_mnist_train.csv')
-    df_train = pd.read_csv(file_path, delimiter=',')
-    y_train = df_train['label']
-    x_train = df_train[df_train.columns[1:]]
-
-    
-    KNN = KNeighborsClassifier(n_neighbors=5)
-    KNN.fit(x_train,y_train)
-    print(data_to_predict)                  
+    data_to_predict = data_to_predict.transpose()       
 
     prediction = KNN.predict(data_to_predict)
     print(prediction)
